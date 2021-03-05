@@ -359,6 +359,49 @@ if wesnoth.kernel_type() == "Game Lua Kernel" then
 			wml.array_access.set(key, value)
 		end
 	})
+	
+	--[========[Global persistent variables]========]
+	local ns_key, global_temp = '$ns$', "lua_global_variable"
+	local global_vars_ns = {}
+	local global_vars_mt = {
+		__index = function(self, namespace)
+			setmetatable({[ns_key] = namespace}, global_vars_ns)
+		end
+	}
+	
+	function global_vars_ns.__index(self, name)
+		local U = wesnoth.require "wml-utils"
+		local var <close> = U.scoped_var(global_temp)
+		wesnoth.unsynced(function()
+			wesnoth.wml_actions.get_global_variable {
+				namespace = self[ns_key],
+				to_local = global_temp,
+				from_global = name,
+				immediate = true,
+			}
+		end)
+		local res = var:get()
+		if res == "" then
+			return nil
+		end
+		return res
+	end
+	
+	function global_vars_ns.__newindex(self, name, val)
+		local U = wesnoth.require "wml-utils"
+		local var <close> = U.scoped_var(global_temp)
+		var:set(val)
+		wesnoth.unsynced(function()
+			wesnoth.wml_actions.set_global_variable {
+				namespace = self[ns_key],
+				from_local = global_temp,
+				to_global = name,
+				immediate = true,
+			}
+		end)
+	end
+	
+	wml.global_vars = setmetatable({}, global_vars_mt)
 else
 	--[========[Backwards compatibility for wml.tovconfig]========]
 	local fake_vconfig_mt = {
