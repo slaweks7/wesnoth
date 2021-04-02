@@ -493,7 +493,7 @@ void extract_summary_from_config(config& cfg_save, config& cfg_summary)
 
 			// We need a binary path-independent path to the leader image here so it can be displayed
 			// for campaign-specific units even when the campaign isn't loaded yet.
-			std::string leader_image_path = filesystem::get_independent_image_path(leader_image);
+			std::string leader_image_path = filesystem::get_independent_binary_file_path("images", leader_image);
 
 			// If the image path was found, we append the leader TC modifier. If it's not (such as in
 			// the case where the binary path hasn't been loaded yet, perhaps due to save_index being
