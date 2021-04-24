@@ -456,7 +456,7 @@ lua_kernel_base::lua_kernel_base()
 		{ "name_generator",           &intf_name_generator           },
 		{ "log",                      &intf_log                      },
 		{ "get_image_size",           &intf_get_image_size           },
-		{ "get_time_stamp",           &intf_get_time_stamp           },
+		{ "ms_since_init",            &intf_get_time_stamp           },
 		{ "get_language",             &intf_get_language             },
 		{ nullptr, nullptr }
 	};
