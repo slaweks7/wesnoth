@@ -67,7 +67,7 @@ res.turns_over_advantage = function()
 				-- Calc the total unit-score here
 				for i, unit in ipairs( wesnoth.units.find_on_map { side = side } ) do
 					if not unit.__cfg.canrecruit then
-						wesnoth.fire("unit_worth", { id = unit.id })
+						wml.fire("unit_worth", { id = unit.id })
 						units = units + wml.variables["unit_worth"]
 					end
 				end
@@ -94,6 +94,6 @@ res.turns_over_advantage = function()
 	else
 		side_comparison = side_comparison .. string.format( "\n" .. tostring( _ "<span foreground='%s'>Side %d</span> has the advantage."), color, winning_sides[1])
 	end
-	wesnoth.fire("message", { message = side_comparison, speaker = "narrator", image = "wesnoth-icon.png"})
+	wml.fire("message", { message = side_comparison, speaker = "narrator", image = "wesnoth-icon.png"})
 end
 return res
